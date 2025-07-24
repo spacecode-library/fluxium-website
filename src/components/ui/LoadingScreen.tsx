@@ -97,7 +97,7 @@ export default function LoadingScreen({ onComplete }: LoadingScreenProps) {
                 }}
                 transition={{
                   duration: 1.5,
-                  ease: [0.76, 0, 0.24, 1], // Premium cubic-bezier
+                  ease: [0.76, 0, 0.24, 1] as const, // Premium cubic-bezier
                   times: [0, 0.6, 1]
                 }}
               />

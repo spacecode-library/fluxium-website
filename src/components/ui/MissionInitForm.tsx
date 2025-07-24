@@ -150,7 +150,7 @@ export default function MissionInitForm({ isOpen, onClose }: MissionInitFormProp
             exit={{ opacity: 0, scale: 0.5, rotateX: -90 }}
             transition={{ 
               duration: 0.6, 
-              ease: [0.6, -0.05, 0.01, 0.99],
+              ease: [0.6, -0.05, 0.01, 0.99] as const,
               rotateX: { duration: 0.8 }
             }}
             className="relative w-full max-w-3xl max-h-[90vh] overflow-hidden"

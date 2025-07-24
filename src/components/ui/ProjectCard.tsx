@@ -57,7 +57,7 @@ export default function ProjectCard({ project, index, onOpenModal }: ProjectCard
         <motion.article
           className="group relative overflow-hidden rounded-2xl bg-glass-background backdrop-blur-md border border-glass-border h-full mission-card"
           whileHover={{ y: -8 }}
-          transition={{ duration: 0.4, ease: [0.6, -0.05, 0.01, 0.99] }}
+          transition={{ duration: 0.4, ease: [0.6, -0.05, 0.01, 0.99] as const }}
         >
           {/* Mission Control Header */}
           <div className="relative px-6 py-4 bg-gradient-to-r from-space-deep/90 to-space-deep/70 border-b border-white/10">

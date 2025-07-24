@@ -141,7 +141,7 @@ export default function MissionLogModal({ project, isOpen, onClose }: MissionLog
             initial={{ opacity: 0, scale: 0.9, y: 20 }}
             animate={{ opacity: 1, scale: 1, y: 0 }}
             exit={{ opacity: 0, scale: 0.9, y: 20 }}
-            transition={{ duration: 0.3, ease: [0.6, -0.05, 0.01, 0.99] }}
+            transition={{ duration: 0.3, ease: [0.6, -0.05, 0.01, 0.99] as const }}
             className="relative w-full max-w-4xl max-h-[90vh] overflow-hidden bg-space-deep/95 backdrop-blur-xl rounded-2xl border border-white/20"
           >
             {/* Header */}
