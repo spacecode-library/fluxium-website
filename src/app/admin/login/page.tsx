@@ -3,8 +3,9 @@
 import { useState } from 'react'
 import { useRouter } from 'next/navigation'
 import { motion } from 'framer-motion'
-import { Lock, User, Eye, EyeOff, Rocket } from 'lucide-react'
+import { Lock, User, Eye, EyeOff } from 'lucide-react'
 import Image from 'next/image'
+import Link from 'next/link'
 
 export default function AdminLogin() {
   const [credentials, setCredentials] = useState({ username: '', password: '' })
@@ -33,7 +34,7 @@ export default function AdminLogin() {
         const errorData = await response.json()
         setError(errorData.message || 'Invalid credentials')
       }
-    } catch (error) {
+    } catch {
       setError('Something went wrong. Please try again.')
     } finally {
       setIsLoading(false)
@@ -178,12 +179,12 @@ export default function AdminLogin() {
             transition={{ delay: 0.5 }}
             className="text-center mt-8"
           >
-            <a 
+            <Link 
               href="/"
               className="text-text-dim hover:text-white transition-colors text-sm"
             >
               ← Back to main site
-            </a>
+            </Link>
           </motion.div>
         </motion.div>
       </div>

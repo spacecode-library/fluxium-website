@@ -8,7 +8,6 @@ import {
   Rocket, 
   BarChart3, 
   Users, 
-  Settings, 
   LogOut,
   Search,
   Edit,
@@ -87,14 +86,14 @@ export default function AdminDashboard() {
       })
 
       if (response.ok) {
-        setProjects(projects.filter((p: any) => p.id !== projectId))
+        setProjects(projects.filter((p: { id: string }) => p.id !== projectId))
       }
     } catch (error) {
       console.error('Failed to delete project:', error)
     }
   }
 
-  const filteredProjects = projects.filter((project: any) =>
+  const filteredProjects = projects.filter((project: { title: string; category: string }) =>
     project.title.toLowerCase().includes(searchQuery.toLowerCase()) ||
     project.category.toLowerCase().includes(searchQuery.toLowerCase())
   )
@@ -253,7 +252,7 @@ export default function AdminDashboard() {
                     </td>
                   </tr>
                 ) : (
-                  filteredProjects.map((project: any) => (
+                  filteredProjects.map((project: { id: string; title: string; description: string; category: string; featured: boolean; missionNumber: number; slug: string }) => (
                     <tr key={project.id} className="border-b border-white/5 hover:bg-white/2">
                       <td className="py-4">
                         <div className="flex items-center gap-3">
