@@ -8,6 +8,11 @@ export const metadata: Metadata = {
   authors: [{ name: "Fluxium" }],
   creator: "Fluxium",
   publisher: "Fluxium",
+  icons: {
+    icon: '/favicon.ico',
+    shortcut: '/favicon.ico',
+    apple: '/favicon.ico',
+  },
   openGraph: {
     type: "website",
     locale: "en_US",

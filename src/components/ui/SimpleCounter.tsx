@@ -18,14 +18,10 @@ export default function SimpleCounter({
   const [count, setCount] = useState(0)
 
   useEffect(() => {
-    console.log('SimpleCounter - trigger:', trigger, 'end:', end)
-    
     if (!trigger) {
       setCount(0)
       return
     }
-
-    console.log('SimpleCounter starting animation to:', end)
     
     // Simple step-by-step animation
     let current = 0
@@ -39,7 +35,6 @@ export default function SimpleCounter({
         current = end
         clearInterval(timer)
       }
-      console.log('SimpleCounter updating count to:', current)
       setCount(current)
     }, stepTime)
 

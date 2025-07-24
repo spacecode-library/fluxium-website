@@ -42,8 +42,6 @@ export default function Stats() {
     threshold: 0.1
   })
 
-  // Debug logging
-  console.log('Stats component - inView:', inView)
 
   const containerVariants = {
     hidden: { opacity: 0 },
