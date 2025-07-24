@@ -18,11 +18,11 @@ export default function Starfield() {
   
   const translateX = useTransform(
     [mouseTranslateX, spaceMovementX], 
-    ([mouse, space]) => mouse + space
+    (latest: number[]) => latest[0] + latest[1]
   )
   const translateY = useTransform(
     [mouseTranslateY, spaceMovementY], 
-    ([mouse, space]) => mouse + space
+    (latest: number[]) => latest[0] + latest[1]
   )
   
   const handleMouseMove = useCallback((e: MouseEvent) => {

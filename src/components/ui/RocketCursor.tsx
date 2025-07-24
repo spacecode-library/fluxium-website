@@ -2,7 +2,11 @@
 
 import { useEffect, useState, useRef } from 'react'
 import { motion, useSpring } from 'framer-motion'
-import { Player } from '@lottiefiles/react-lottie-player'
+import dynamic from 'next/dynamic'
+
+const Player = dynamic(() => import('@lottiefiles/react-lottie-player').then(mod => mod.Player), {
+  ssr: false
+})
 
 export default function RocketCursor() {
   const [mousePosition, setMousePosition] = useState({ x: 0, y: 0 })
