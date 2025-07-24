@@ -20,7 +20,7 @@ export default function Navigation() {
   const [isScrolled, setIsScrolled] = useState(false)
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false)
   const [adminClickCount, setAdminClickCount] = useState(0)
-  const adminClickTimerRef = useRef<NodeJS.Timeout>()
+  const adminClickTimerRef = useRef<NodeJS.Timeout | null>(null)
   
   // Removed unused scroll transforms for cleaner code
 
