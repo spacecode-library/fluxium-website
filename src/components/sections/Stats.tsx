@@ -3,7 +3,7 @@
 import { motion } from 'framer-motion'
 import { useInView } from 'react-intersection-observer'
 import { Rocket, Shield, Code2, Clock } from 'lucide-react'
-import AnimatedCounter from '@/components/ui/AnimatedCounter'
+import SimpleCounter from '@/components/ui/SimpleCounter'
 
 const stats = [
   {
@@ -42,6 +42,9 @@ export default function Stats() {
     threshold: 0.1
   })
 
+  // Debug logging
+  console.log('Stats component - inView:', inView)
+
   const containerVariants = {
     hidden: { opacity: 0 },
     visible: {
@@ -79,6 +82,12 @@ export default function Stats() {
           initial="hidden"
           animate={inView ? "visible" : "hidden"}
         >
+          {/* Debug indicator - remove in production */}
+          {inView && (
+            <div className="fixed top-4 left-4 bg-green-500 text-white px-2 py-1 rounded text-xs z-50">
+              Stats in view!
+            </div>
+          )}
           {stats.map((stat, index) => (
             <motion.div
               key={index}
@@ -98,10 +107,8 @@ export default function Stats() {
 
                 {/* Number */}
                 <div className="text-fluid-4xl font-bold mb-2">
-                  <AnimatedCounter
+                  <SimpleCounter
                     end={stat.number}
-                    duration={2500}
-                    separator=","
                     suffix={stat.suffix}
                     className="gradient-text"
                     trigger={inView}

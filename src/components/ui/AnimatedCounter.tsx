@@ -23,8 +23,11 @@ export default function AnimatedCounter({
   const [isAnimating, setIsAnimating] = useState(false)
 
   useEffect(() => {
+    console.log('AnimatedCounter - trigger:', trigger, 'end:', end, 'isAnimating:', isAnimating)
+    
     if (!trigger || isAnimating) return
 
+    console.log('Starting animation for:', end)
     setIsAnimating(true)
     let startTime: number
     let animationFrame: number
