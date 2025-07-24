@@ -6,17 +6,13 @@ import Image from 'next/image'
 import Link from 'next/link'
 import { 
   X, 
-  ExternalLink, 
   Github, 
   Calendar, 
   Users, 
-  Zap, 
   Target, 
-  CheckCircle, 
   Activity,
   Code,
   Globe,
-  Clock,
   TrendingUp
 } from 'lucide-react'
 import type { Project } from '@/types'

@@ -54,7 +54,7 @@ export default function Starfield() {
       
       // Randomize entry point and trajectory (meteors can come from any direction)
       const entryEdge = Math.random();
-      let startX, startY, endX, endY, velocity;
+      let startX, startY, endX, endY;
       
       if (entryEdge < 0.25) {
         // Top edge entry
@@ -92,7 +92,7 @@ export default function Starfield() {
       }
       
       // Calculate meteor velocity and properties based on physics
-      const distance = Math.sqrt(Math.pow(endX - startX, 2) + Math.pow(endY - startY, 2));
+      // const distance = Math.sqrt(Math.pow(endX - startX, 2) + Math.pow(endY - startY, 2));
       
       // Realistic meteor speeds: 11-72 km/s (average 30,000 mph)
       // Fast meteors = 0.5-1.5s, Medium = 1.5-3s, Slow = 3-6s

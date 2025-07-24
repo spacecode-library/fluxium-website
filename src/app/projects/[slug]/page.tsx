@@ -19,7 +19,7 @@ async function getProject(slug: string) {
       }
     })
     return project
-  } catch (error) {
+  } catch {
     return null
   }
 }

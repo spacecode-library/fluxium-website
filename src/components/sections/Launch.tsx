@@ -2,8 +2,7 @@
 
 import { motion, useScroll, useTransform } from 'framer-motion'
 import { useInView } from 'react-intersection-observer'
-import Link from 'next/link'
-import { Rocket, Send, Mail, Clock, Zap, ArrowUpRight, Satellite } from 'lucide-react'
+import { Rocket, Mail, Clock, Satellite } from 'lucide-react'
 import { useRef, useState } from 'react'
 import MissionInitForm from '@/components/ui/MissionInitForm'
 

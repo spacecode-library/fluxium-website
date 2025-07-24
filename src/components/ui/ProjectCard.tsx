@@ -2,8 +2,7 @@
 
 import { motion } from 'framer-motion'
 import Image from 'next/image'
-import Link from 'next/link'
-import { ExternalLink, Github, ArrowUpRight, CheckCircle, Calendar, Users, Zap, Activity, Target } from 'lucide-react'
+import { ExternalLink, Github, ArrowUpRight, Calendar, Users, Zap, Activity, Target } from 'lucide-react'
 import type { Project } from '@/types'
 
 interface ProjectCardProps {
@@ -150,7 +149,7 @@ export default function ProjectCard({ project, index, onOpenModal }: ProjectCard
             <div className="mb-5">
               <div className="text-xs font-mono text-white/50 mb-2 uppercase tracking-wider">Tech Stack</div>
               <div className="flex flex-wrap gap-1.5">
-                {project.technologies.slice(0, 4).map((tech, i) => (
+                {project.technologies.slice(0, 4).map((tech) => (
                   <span
                     key={tech}
                     className="px-2.5 py-1 text-xs rounded-md bg-cosmic-purple/15 border border-cosmic-purple/25 text-white/90 font-mono hover:bg-cosmic-purple/25 transition-colors"

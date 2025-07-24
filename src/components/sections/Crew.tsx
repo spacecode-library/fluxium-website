@@ -4,7 +4,7 @@ import { motion } from 'framer-motion'
 import { useInView } from 'react-intersection-observer'
 import Image from 'next/image'
 import Link from 'next/link'
-import { Github, ExternalLink } from 'lucide-react'
+import { Github } from 'lucide-react'
 
 const crewMembers = [
   {
@@ -89,7 +89,7 @@ export default function Crew() {
               </h2>
               <div className="space-y-4 text-fluid-lg text-text-muted leading-relaxed">
                 <p>
-                  Hey, we're Rahul and Mukela. We started Fluxium because we got tired of seeing good ideas die in bad execution.
+                  Hey, we&apos;re Rahul and Mukela. We started Fluxium because we got tired of seeing good ideas die in bad execution.
                 </p>
                 <p>
                   We write code that scales, design interfaces people actually want to use, and deliver projects on time. Wild concept, right?

@@ -39,9 +39,6 @@ export default function RocketTracker() {
     [1, 1.3]
   )
   
-  // Progress percentage for display (rounded)
-  const progressPercent = useTransform(scrollYProgress, (value) => Math.round(value * 100))
-  
   // Trail height based on rocket position
   const trailHeight = useTransform(
     scrollYProgress,

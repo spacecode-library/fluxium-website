@@ -8,7 +8,6 @@ import {
   Upload, 
   Plus, 
   X, 
-  Link as LinkIcon,
   Github,
   ExternalLink,
   Save,
@@ -113,7 +112,7 @@ export default function NewProject() {
         } else if (key === 'heroImage' && value) {
           formData.append(key, value)
         } else if (key === 'screenshots') {
-          ;(value as File[]).forEach((file, index) => {
+          ;(value as File[]).forEach((file) => {
             formData.append(`screenshots`, file)
           })
         } else if (typeof value === 'string' || typeof value === 'boolean') {
@@ -136,7 +135,7 @@ export default function NewProject() {
         const errorData = await response.json()
         setError(errorData.message || 'Failed to create project')
       }
-    } catch (error) {
+    } catch {
       setError('Something went wrong. Please try again.')
     } finally {
       setIsLoading(false)

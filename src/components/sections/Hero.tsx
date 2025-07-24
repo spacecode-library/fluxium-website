@@ -3,7 +3,7 @@
 import { useState } from 'react'
 import { motion } from 'framer-motion'
 import Link from 'next/link'
-import { ArrowRight, Sparkles } from 'lucide-react'
+import { ArrowRight } from 'lucide-react'
 import MissionInitForm from '@/components/ui/MissionInitForm'
 import TechLogos from '@/components/ui/TechLogos'
 

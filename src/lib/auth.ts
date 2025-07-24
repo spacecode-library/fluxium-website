@@ -61,7 +61,7 @@ export async function authenticateAdmin(username: string, password: string) {
       id: admin.id,
       username: admin.username
     }
-  } catch (error) {
+  } catch {
     console.error('Database authentication failed, using env fallback only')
     return null
   }
@@ -79,7 +79,7 @@ export async function createAdmin(username: string, password: string) {
 }
 
 // Middleware for protecting admin routes
-export function requireAuth(handler: any) {
+export function requireAuth(handler: (req: Request & { admin?: { username: string } }) => Promise<Response>) {
   return async (req: Request) => {
     const authHeader = req.headers.get('authorization')
     
@@ -95,7 +95,7 @@ export function requireAuth(handler: any) {
     }
 
     // Add user to request object for use in handler
-    ;(req as any).admin = payload
+    ;(req as Request & { admin?: { username: string } }).admin = payload
 
     return handler(req)
   }

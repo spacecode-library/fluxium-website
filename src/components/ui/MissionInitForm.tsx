@@ -1,6 +1,6 @@
 'use client'
 
-import { useState, useEffect, useRef } from 'react'
+import { useState } from 'react'
 import { motion, AnimatePresence } from 'framer-motion'
 import dynamic from 'next/dynamic'
 import { 
@@ -12,7 +12,6 @@ import {
   DollarSign, 
   Target, 
   Send, 
-  CheckCircle,
   Lightbulb,
   Code,
   Zap,
@@ -124,7 +123,7 @@ export default function MissionInitForm({ isOpen, onClose }: MissionInitFormProp
       } else {
         throw new Error('Failed to send mission brief')
       }
-    } catch (error) {
+    } catch {
       setError('Failed to initialize mission. Please try again.')
     } finally {
       setIsSubmitting(false)
@@ -195,7 +194,7 @@ export default function MissionInitForm({ isOpen, onClose }: MissionInitFormProp
                         Your Inquiry Has Been Sent
                       </h3>
                       <p className="text-lg text-text-secondary mb-8 max-w-md mx-auto leading-relaxed">
-                        Thank you for reaching out to Fluxium. We've received your project details and will respond within 24 hours.
+                        Thank you for reaching out to Fluxium. We&apos;ve received your project details and will respond within 24 hours.
                       </p>
                     </motion.div>
                     
