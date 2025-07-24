@@ -2,10 +2,8 @@
 
 import { motion } from 'framer-motion'
 import { useInView } from 'react-intersection-observer'
-import dynamic from 'next/dynamic'
 import { Rocket, Shield, Code2, Clock } from 'lucide-react'
-
-const CountUp = dynamic(() => import('react-countup'), { ssr: false })
+import AnimatedCounter from '@/components/ui/AnimatedCounter'
 
 const stats = [
   {
@@ -100,19 +98,14 @@ export default function Stats() {
 
                 {/* Number */}
                 <div className="text-fluid-4xl font-bold mb-2">
-                  {inView && (
-                    <CountUp
-                      start={0}
-                      end={stat.number}
-                      duration={2.5}
-                      separator=","
-                      suffix={stat.suffix}
-                    >
-                      {({ countUpRef }) => (
-                        <span ref={countUpRef} className="gradient-text" />
-                      )}
-                    </CountUp>
-                  )}
+                  <AnimatedCounter
+                    end={stat.number}
+                    duration={2500}
+                    separator=","
+                    suffix={stat.suffix}
+                    className="gradient-text"
+                    trigger={inView}
+                  />
                 </div>
 
                 {/* Label */}

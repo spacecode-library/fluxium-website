@@ -14,25 +14,29 @@ export default function RocketTracker() {
   const rocketRef = useRef<HTMLDivElement>(null)
   const { scrollYProgress } = useScroll()
   
-  // Smooth position transform - stop at 85% to end before CTA
+  // Calculate viewport-based position that tracks with scroll
+  const viewportHeight = typeof window !== 'undefined' ? window.innerHeight : 800
+  const maxScroll = 0.85 // Stop at 85% to avoid CTA
+  
+  // Position rocket proportionally with scroll - it should track the user's position
   const y = useTransform(
     scrollYProgress,
-    [0, 0.85],
-    ['0vh', '75vh']
+    [0, maxScroll],
+    [0, viewportHeight * 0.8] // Move 80% of viewport height
   )
 
   // Scale transform for launch effect at the end
   const scale = useTransform(
     scrollYProgress,
-    [0.8, 0.85],
-    [1, 1.2]
+    [0.75, maxScroll],
+    [1, 1.3]
   )
   
-  // Trail height based on rocket position
+  // Trail height grows with scroll progress
   const trailHeight = useTransform(
     scrollYProgress,
-    [0, 0.8],
-    ['0vh', '60vh']
+    [0, maxScroll],
+    [0, 200] // Trail grows to 200px max
   )
 
   // Spring animation for smooth movement
