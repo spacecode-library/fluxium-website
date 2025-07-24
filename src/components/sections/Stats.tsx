@@ -82,12 +82,6 @@ export default function Stats() {
           initial="hidden"
           animate={inView ? "visible" : "hidden"}
         >
-          {/* Debug indicator - remove in production */}
-          {inView && (
-            <div className="fixed top-4 left-4 bg-green-500 text-white px-2 py-1 rounded text-xs z-50">
-              Stats in view!
-            </div>
-          )}
           {stats.map((stat, index) => (
             <motion.div
               key={index}
