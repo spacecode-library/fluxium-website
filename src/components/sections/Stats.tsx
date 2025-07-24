@@ -2,8 +2,10 @@
 
 import { motion } from 'framer-motion'
 import { useInView } from 'react-intersection-observer'
-import CountUp from 'react-countup'
+import dynamic from 'next/dynamic'
 import { Rocket, Shield, Code2, Clock } from 'lucide-react'
+
+const CountUp = dynamic(() => import('react-countup'), { ssr: false })
 
 const stats = [
   {
