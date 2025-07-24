@@ -1,0 +1,69 @@
+// Fluxium Database Schema
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+model Admin {
+  id        String   @id @default(cuid())
+  username  String   @unique
+  password  String
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  @@map("admins")
+}
+
+model Project {
+  id               String       @id @default(cuid())
+  title            String
+  slug             String       @unique
+  description      String
+  longDescription  String       @db.Text
+  category         String
+  heroImage        String
+  technologies     String[]
+  screenshots      Screenshot[]
+  githubUrl        String?
+  liveUrl          String?
+  featured         Boolean      @default(false)
+  missionNumber    Int          @default(autoincrement())
+  createdAt        DateTime     @default(now())
+  updatedAt        DateTime     @updatedAt
+
+  @@map("projects")
+}
+
+model Screenshot {
+  id        String   @id @default(cuid())
+  url       String
+  caption   String?
+  projectId String
+  project   Project  @relation(fields: [projectId], references: [id], onDelete: Cascade)
+  createdAt DateTime @default(now())
+
+  @@map("screenshots")
+}
+
+model Contact {
+  id        String   @id @default(cuid())
+  name      String
+  email     String
+  company   String?
+  message   String   @db.Text
+  status    ContactStatus @default(NEW)
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  @@map("contacts")
+}
+
+enum ContactStatus {
+  NEW
+  REPLIED
+  CLOSED
+}

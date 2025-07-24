@@ -1,0 +1,1012 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Fluxium</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        :root {
+            --space-black: #030303;
+            --space-dark: #0a0a0f;
+            --cosmic-blue: #4F46E5;
+            --cosmic-cyan: #06B6D4;
+            --stellar-white: #ffffff;
+            --nebula-purple: #8B5CF6;
+            --star-yellow: #FCD34D;
+            --text-dim: #94A3B8;
+            --card-dark: rgba(15, 15, 25, 0.8);
+        }
+
+        html {
+            scroll-behavior: smooth;
+        }
+
+        body {
+            font-family: -apple-system, 'SF Pro Display', sans-serif;
+            background: var(--space-black);
+            color: var(--stellar-white);
+            overflow-x: hidden;
+            cursor: crosshair;
+        }
+
+        /* Custom Cursor */
+        .cursor {
+            width: 20px;
+            height: 20px;
+            border: 2px solid var(--cosmic-cyan);
+            border-radius: 50%;
+            position: fixed;
+            pointer-events: none;
+            z-index: 9999;
+            transition: transform 0.1s ease;
+            mix-blend-mode: difference;
+        }
+
+        /* Starfield Background */
+        .starfield {
+            position: fixed;
+            width: 100%;
+            height: 100%;
+            top: 0;
+            left: 0;
+            z-index: -1;
+        }
+
+        .star {
+            position: absolute;
+            width: 2px;
+            height: 2px;
+            background: white;
+            border-radius: 50%;
+            animation: twinkle 3s infinite;
+        }
+
+        @keyframes twinkle {
+            0%, 100% { opacity: 0.3; }
+            50% { opacity: 1; }
+        }
+
+        /* Rocket Tracker */
+        .rocket-tracker {
+            position: fixed;
+            left: 60px;
+            top: 20%;
+            z-index: 100;
+            transition: top 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+        }
+
+        .rocket {
+            width: 40px;
+            height: 60px;
+            position: relative;
+            transform: rotate(-45deg);
+        }
+
+        .rocket-body {
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(135deg, var(--cosmic-blue), var(--cosmic-cyan));
+            clip-path: polygon(50% 0%, 75% 50%, 50% 100%, 25% 50%);
+            box-shadow: 0 0 30px var(--cosmic-cyan);
+        }
+
+        .rocket-fire {
+            position: absolute;
+            bottom: -20px;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 20px;
+            height: 30px;
+            background: linear-gradient(to bottom, #FCD34D, #EF4444, transparent);
+            clip-path: polygon(50% 0%, 100% 100%, 0% 100%);
+            animation: fire-flicker 0.2s infinite alternate;
+        }
+
+        @keyframes fire-flicker {
+            0% { transform: translateX(-50%) scaleY(1); opacity: 0.9; }
+            100% { transform: translateX(-50%) scaleY(1.2); opacity: 1; }
+        }
+
+        .rocket-trail {
+            position: absolute;
+            width: 2px;
+            background: linear-gradient(to bottom, var(--cosmic-cyan), transparent);
+            left: 50%;
+            transform: translateX(-50%);
+            top: 60px;
+            opacity: 0.6;
+        }
+
+        /* Navigation */
+        nav {
+            position: fixed;
+            width: 100%;
+            top: 0;
+            z-index: 1000;
+            padding: 2rem 4rem;
+            backdrop-filter: blur(20px);
+            background: rgba(3, 3, 3, 0.7);
+            border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+        }
+
+        .nav-container {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            max-width: 1400px;
+            margin: 0 auto;
+        }
+
+        .logo-container {
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+            cursor: pointer;
+        }
+
+        .logo {
+            height: 45px;
+            filter: drop-shadow(0 0 20px var(--cosmic-cyan));
+            transition: transform 0.3s ease;
+        }
+
+        .logo:hover {
+            transform: scale(1.1) rotate(5deg);
+        }
+
+        .nav-links {
+            display: flex;
+            gap: 3rem;
+            list-style: none;
+        }
+
+        .nav-links a {
+            color: var(--text-dim);
+            text-decoration: none;
+            font-weight: 500;
+            position: relative;
+            transition: color 0.3s ease;
+            cursor: pointer;
+        }
+
+        .nav-links a:hover {
+            color: var(--stellar-white);
+        }
+
+        .nav-links a::after {
+            content: '';
+            position: absolute;
+            bottom: -5px;
+            left: 0;
+            width: 0;
+            height: 2px;
+            background: linear-gradient(90deg, var(--cosmic-blue), var(--cosmic-cyan));
+            transition: width 0.3s ease;
+        }
+
+        .nav-links a:hover::after {
+            width: 100%;
+        }
+
+        /* Hero Section */
+        .hero {
+            min-height: 100vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            position: relative;
+            padding: 0 4rem;
+        }
+
+        .hero-content {
+            text-align: center;
+            z-index: 10;
+            max-width: 900px;
+        }
+
+        .hero h1 {
+            font-size: clamp(3rem, 10vw, 6rem);
+            font-weight: 800;
+            margin-bottom: 1.5rem;
+            line-height: 1.1;
+            letter-spacing: -0.02em;
+        }
+
+        .gradient-text {
+            background: linear-gradient(135deg, var(--stellar-white), var(--cosmic-cyan));
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+
+        .hero p {
+            font-size: 1.5rem;
+            color: var(--text-dim);
+            margin-bottom: 3rem;
+            font-weight: 300;
+        }
+
+        .cta-group {
+            display: flex;
+            gap: 2rem;
+            justify-content: center;
+            flex-wrap: wrap;
+        }
+
+        .btn {
+            padding: 1.2rem 2.5rem;
+            font-size: 1.1rem;
+            font-weight: 600;
+            border-radius: 50px;
+            text-decoration: none;
+            transition: all 0.3s ease;
+            display: inline-flex;
+            align-items: center;
+            gap: 0.5rem;
+            cursor: pointer;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .btn-primary {
+            background: linear-gradient(135deg, var(--cosmic-blue), var(--cosmic-cyan));
+            color: white;
+            box-shadow: 0 10px 30px rgba(79, 70, 229, 0.3);
+        }
+
+        .btn-primary:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 15px 40px rgba(79, 70, 229, 0.4);
+        }
+
+        .btn-secondary {
+            background: transparent;
+            color: var(--stellar-white);
+            border: 2px solid rgba(255, 255, 255, 0.2);
+        }
+
+        .btn-secondary:hover {
+            background: rgba(255, 255, 255, 0.1);
+            border-color: var(--cosmic-cyan);
+        }
+
+        /* Mission Stats */
+        .stats {
+            padding: 8rem 4rem;
+            position: relative;
+        }
+
+        .stats-container {
+            max-width: 1200px;
+            margin: 0 auto;
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 3rem;
+        }
+
+        .stat-card {
+            background: var(--card-dark);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            border-radius: 20px;
+            padding: 3rem;
+            text-align: center;
+            position: relative;
+            overflow: hidden;
+            transition: all 0.3s ease;
+        }
+
+        .stat-card::before {
+            content: '';
+            position: absolute;
+            top: -50%;
+            left: -50%;
+            width: 200%;
+            height: 200%;
+            background: radial-gradient(circle, var(--cosmic-cyan) 0%, transparent 70%);
+            opacity: 0;
+            transition: opacity 0.3s ease;
+        }
+
+        .stat-card:hover::before {
+            opacity: 0.1;
+        }
+
+        .stat-card:hover {
+            transform: translateY(-10px);
+            border-color: var(--cosmic-cyan);
+            box-shadow: 0 20px 40px rgba(6, 182, 212, 0.2);
+        }
+
+        .stat-number {
+            font-size: 3.5rem;
+            font-weight: 800;
+            background: linear-gradient(135deg, var(--cosmic-blue), var(--cosmic-cyan));
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+            margin-bottom: 0.5rem;
+        }
+
+        .stat-label {
+            color: var(--text-dim);
+            font-size: 1.2rem;
+        }
+
+        /* Capabilities Section */
+        .capabilities {
+            padding: 8rem 4rem;
+            position: relative;
+        }
+
+        .section-header {
+            text-align: center;
+            max-width: 800px;
+            margin: 0 auto 5rem;
+        }
+
+        .section-header h2 {
+            font-size: 3.5rem;
+            margin-bottom: 1.5rem;
+            font-weight: 800;
+        }
+
+        .section-header p {
+            font-size: 1.3rem;
+            color: var(--text-dim);
+            line-height: 1.6;
+        }
+
+        .capabilities-grid {
+            max-width: 1200px;
+            margin: 0 auto;
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(350px, 1fr));
+            gap: 2rem;
+        }
+
+        .capability-card {
+            background: var(--card-dark);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            border-radius: 20px;
+            padding: 3rem;
+            position: relative;
+            overflow: hidden;
+            transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+            cursor: pointer;
+        }
+
+        .capability-card::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(135deg, rgba(139, 92, 246, 0.1), rgba(6, 182, 212, 0.1));
+            opacity: 0;
+            transition: opacity 0.3s ease;
+        }
+
+        .capability-card:hover::before {
+            opacity: 1;
+        }
+
+        .capability-card:hover {
+            transform: translateY(-5px) rotateX(5deg);
+            box-shadow: 0 30px 60px rgba(6, 182, 212, 0.3);
+        }
+
+        .capability-icon {
+            font-size: 3rem;
+            margin-bottom: 1.5rem;
+            display: inline-block;
+            animation: float 3s ease-in-out infinite;
+        }
+
+        @keyframes float {
+            0%, 100% { transform: translateY(0); }
+            50% { transform: translateY(-10px); }
+        }
+
+        .capability-card h3 {
+            font-size: 1.8rem;
+            margin-bottom: 1rem;
+            font-weight: 700;
+        }
+
+        .capability-card p {
+            color: var(--text-dim);
+            line-height: 1.6;
+            font-size: 1.1rem;
+        }
+
+        /* Mission Log (Projects) */
+        .missions {
+            padding: 8rem 4rem;
+            position: relative;
+        }
+
+        .mission-grid {
+            max-width: 1400px;
+            margin: 0 auto;
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(400px, 1fr));
+            gap: 3rem;
+        }
+
+        .mission-card {
+            background: var(--card-dark);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            border-radius: 20px;
+            overflow: hidden;
+            transition: all 0.4s ease;
+            cursor: pointer;
+            position: relative;
+        }
+
+        .mission-card:hover {
+            transform: scale(1.02);
+            box-shadow: 0 30px 60px rgba(79, 70, 229, 0.3);
+        }
+
+        .mission-image {
+            height: 250px;
+            background: linear-gradient(135deg, rgba(79, 70, 229, 0.3), rgba(6, 182, 212, 0.3));
+            position: relative;
+            overflow: hidden;
+        }
+
+        .mission-badge {
+            position: absolute;
+            top: 20px;
+            right: 20px;
+            background: var(--cosmic-blue);
+            color: white;
+            padding: 0.5rem 1rem;
+            border-radius: 20px;
+            font-size: 0.9rem;
+            font-weight: 600;
+        }
+
+        .mission-content {
+            padding: 2.5rem;
+        }
+
+        .mission-content h3 {
+            font-size: 2rem;
+            margin-bottom: 1rem;
+            font-weight: 700;
+        }
+
+        .mission-content p {
+            color: var(--text-dim);
+            line-height: 1.6;
+            margin-bottom: 1.5rem;
+        }
+
+        .tech-tags {
+            display: flex;
+            gap: 0.5rem;
+            flex-wrap: wrap;
+        }
+
+        .tech-tag {
+            background: rgba(79, 70, 229, 0.2);
+            border: 1px solid var(--cosmic-blue);
+            color: var(--cosmic-cyan);
+            padding: 0.4rem 1rem;
+            border-radius: 20px;
+            font-size: 0.9rem;
+        }
+
+        /* Launch Section */
+        .launch {
+            padding: 10rem 4rem;
+            text-align: center;
+            position: relative;
+            min-height: 100vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .launch-platform {
+            max-width: 800px;
+            margin: 0 auto;
+            position: relative;
+        }
+
+        .launch-platform h2 {
+            font-size: 4rem;
+            margin-bottom: 2rem;
+            font-weight: 800;
+        }
+
+        .mission-counter {
+            font-size: 6rem;
+            font-weight: 900;
+            background: linear-gradient(135deg, var(--cosmic-blue), var(--cosmic-cyan));
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+            margin-bottom: 1rem;
+        }
+
+        .launch-platform p {
+            font-size: 1.5rem;
+            color: var(--text-dim);
+            margin-bottom: 3rem;
+        }
+
+        .launch-btn {
+            font-size: 1.3rem;
+            padding: 1.5rem 3rem;
+            background: linear-gradient(135deg, var(--cosmic-blue), var(--cosmic-cyan));
+            color: white;
+            border-radius: 50px;
+            text-decoration: none;
+            display: inline-flex;
+            align-items: center;
+            gap: 1rem;
+            box-shadow: 0 20px 40px rgba(79, 70, 229, 0.4);
+            transition: all 0.3s ease;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .launch-btn:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 30px 60px rgba(79, 70, 229, 0.5);
+        }
+
+        .launch-btn::before {
+            content: '';
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            width: 0;
+            height: 0;
+            background: rgba(255, 255, 255, 0.2);
+            border-radius: 50%;
+            transform: translate(-50%, -50%);
+            transition: width 0.6s ease, height 0.6s ease;
+        }
+
+        .launch-btn:hover::before {
+            width: 300px;
+            height: 300px;
+        }
+
+        /* Responsive */
+        @media (max-width: 768px) {
+            nav {
+                padding: 1.5rem 2rem;
+            }
+
+            .nav-links {
+                display: none;
+            }
+
+            .rocket-tracker {
+                left: 20px;
+            }
+
+            .hero h1 {
+                font-size: 3rem;
+            }
+
+            .hero p {
+                font-size: 1.2rem;
+            }
+
+            .cta-group {
+                flex-direction: column;
+                align-items: center;
+            }
+
+            .section-header h2 {
+                font-size: 2.5rem;
+            }
+
+            .mission-grid,
+            .capabilities-grid {
+                grid-template-columns: 1fr;
+            }
+        }
+
+        /* Loading Animation */
+        .loader {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: var(--space-black);
+            z-index: 10000;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            transition: opacity 0.5s ease;
+        }
+
+        .loader-rocket {
+            animation: launch 2s ease-in-out infinite;
+        }
+
+        @keyframes launch {
+            0% { transform: translateY(0) rotate(-45deg); }
+            50% { transform: translateY(-50px) rotate(-45deg); }
+            100% { transform: translateY(0) rotate(-45deg); }
+        }
+    </style>
+</head>
+<body>
+    <!-- Custom Cursor -->
+    <div class="cursor"></div>
+
+    <!-- Loading Screen -->
+    <div class="loader" id="loader">
+        <div class="loader-rocket">
+            <div class="rocket">
+                <div class="rocket-body"></div>
+                <div class="rocket-fire"></div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Starfield Background -->
+    <div class="starfield" id="starfield"></div>
+
+    <!-- Rocket Tracker -->
+    <div class="rocket-tracker" id="rocketTracker">
+        <div class="rocket">
+            <div class="rocket-body"></div>
+            <div class="rocket-fire"></div>
+        </div>
+        <div class="rocket-trail" id="rocketTrail"></div>
+    </div>
+
+    <!-- Navigation -->
+    <nav>
+        <div class="nav-container">
+            <div class="logo-container">
+                <img src="https://res.cloudinary.com/dizbrnm2l/image/upload/v1752674061/Fluxium-logo_hb7vp8.png" alt="Fluxium" class="logo">
+            </div>
+            <ul class="nav-links">
+                <li><a href="#home">Home</a></li>
+                <li><a href="#capabilities">Capabilities</a></li>
+                <li><a href="#missions">Missions</a></li>
+                <li><a href="#launch">Launch</a></li>
+            </ul>
+        </div>
+    </nav>
+
+    <!-- Hero Section -->
+    <section class="hero" id="home">
+        <div class="hero-content">
+            <h1>We Build <span class="gradient-text">Digital Products</span><br>That Actually Work</h1>
+            <p>Two engineers. Six years of shipping code. Zero fluff.</p>
+            <div class="cta-group">
+                <a href="#missions" class="btn btn-primary">View Our Missions 🚀</a>
+                <a href="#launch" class="btn btn-secondary">Start Your Project</a>
+            </div>
+        </div>
+    </section>
+
+    <!-- Mission Stats -->
+    <section class="stats">
+        <div class="stats-container">
+            <div class="stat-card">
+                <div class="stat-number" data-count="20">0</div>
+                <div class="stat-label">Missions Completed</div>
+            </div>
+            <div class="stat-card">
+                <div class="stat-number" data-count="100">0</div>
+                <div class="stat-label">Success Rate</div>
+            </div>
+            <div class="stat-card">
+                <div class="stat-number" data-count="15">0</div>
+                <div class="stat-label">Technologies Mastered</div>
+            </div>
+            <div class="stat-card">
+                <div class="stat-number" data-count="6">0</div>
+                <div class="stat-label">Years in Orbit</div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Capabilities -->
+    <section class="capabilities" id="capabilities">
+        <div class="section-header">
+            <h2>Our <span class="gradient-text">Capabilities</span></h2>
+            <p>What we actually do (no buzzwords, promise)</p>
+        </div>
+        <div class="capabilities-grid">
+            <div class="capability-card">
+                <div class="capability-icon">💻</div>
+                <h3>Full-Stack Development</h3>
+                <p>We build the whole thing. Front to back. No passing the buck. React, Node.js, and whatever else gets the job done.</p>
+            </div>
+            <div class="capability-card">
+                <div class="capability-icon">📱</div>
+                <h3>Mobile Apps</h3>
+                <p>Native feel, cross-platform reality. Your app on every phone, without the headache of building it twice.</p>
+            </div>
+            <div class="capability-card">
+                <div class="capability-icon">🤖</div>
+                <h3>AI Integration</h3>
+                <p>Making machines work for humans, not the other way around. GPT, custom models, whatever makes sense.</p>
+            </div>
+            <div class="capability-card">
+                <div class="capability-icon">🏥</div>
+                <h3>Healthcare Systems</h3>
+                <p>HIPAA-compliant platforms that doctors actually like using. Because healthcare software shouldn't feel like punishment.</p>
+            </div>
+            <div class="capability-card">
+                <div class="capability-icon">⚡</div>
+                <h3>Real-Time Magic</h3>
+                <p>Live data, instant updates, zero lag. When milliseconds matter, we make them count.</p>
+            </div>
+            <div class="capability-card">
+                <div class="capability-icon">☁️</div>
+                <h3>Cloud Architecture</h3>
+                <p>Scales when you need it, saves money when you don't. AWS, serverless, or whatever keeps your CFO happy.</p>
+            </div>
+        </div>
+    </section>
+
+    <!-- Mission Log -->
+    <section class="missions" id="missions">
+        <div class="section-header">
+            <h2>Mission <span class="gradient-text">Log</span></h2>
+            <p>Projects we've shipped (and clients who still talk to us)</p>
+        </div>
+        <div class="mission-grid">
+            <div class="mission-card">
+                <div class="mission-image">
+                    <div class="mission-badge">Mission Complete</div>
+                </div>
+                <div class="mission-content">
+                    <h3>Nurse Nest</h3>
+                    <p>Built a platform where nurses find work and facilities find nurses. Handled the tricky bits: secure payments, automated timecards, and making sure everything's HIPAA-compliant. 500+ nurses using it daily.</p>
+                    <div class="tech-tags">
+                        <span class="tech-tag">React</span>
+                        <span class="tech-tag">Supabase</span>
+                        <span class="tech-tag">Stripe</span>
+                        <span class="tech-tag">HIPAA</span>
+                    </div>
+                </div>
+            </div>
+            <div class="mission-card">
+                <div class="mission-image">
+                    <div class="mission-badge">Mission Complete</div>
+                </div>
+                <div class="mission-content">
+                    <h3>Frizit Logistics</h3>
+                    <p>Cold chain logistics was a mess. We fixed it. Real-time tracking, automated dispatch, and dashboards that make sense. Now handling 1,000+ deliveries daily without breaking a sweat.</p>
+                    <div class="tech-tags">
+                        <span class="tech-tag">React Native</span>
+                        <span class="tech-tag">Node.js</span>
+                        <span class="tech-tag">MongoDB</span>
+                        <span class="tech-tag">GPS</span>
+                    </div>
+                </div>
+            </div>
+            <div class="mission-card">
+                <div class="mission-image">
+                    <div class="mission-badge">Mission Complete</div>
+                </div>
+                <div class="mission-content">
+                    <h3>BotMint AI</h3>
+                    <p>Gave businesses their own AI assistant. No more 'press 1 for sales' nonsense. Just conversations that actually help customers and don't waste everyone's time.</p>
+                    <div class="tech-tags">
+                        <span class="tech-tag">Next.js</span>
+                        <span class="tech-tag">OpenAI</span>
+                        <span class="tech-tag">Socket.io</span>
+                        <span class="tech-tag">MongoDB</span>
+                    </div>
+                </div>
+            </div>
+            <div class="mission-card">
+                <div class="mission-image">
+                    <div class="mission-badge">Mission Complete</div>
+                </div>
+                <div class="mission-content">
+                    <h3>CampusClub</h3>
+                    <p>Students love discounts. Businesses love customers. We connected them. Location-based deals, instant verification, everybody wins. 10,000+ active users.</p>
+                    <div class="tech-tags">
+                        <span class="tech-tag">React Native</span>
+                        <span class="tech-tag">Express</span>
+                        <span class="tech-tag">JWT</span>
+                        <span class="tech-tag">Maps</span>
+                    </div>
+                </div>
+            </div>
+            <div class="mission-card">
+                <div class="mission-image">
+                    <div class="mission-badge">Mission Complete</div>
+                </div>
+                <div class="mission-content">
+                    <h3>Forex Trading Platform</h3>
+                    <p>Real-time market data, instant trades, zero downtime. When money moves this fast, the code better keep up. MetaTrader integration included.</p>
+                    <div class="tech-tags">
+                        <span class="tech-tag">React</span>
+                        <span class="tech-tag">WebSocket</span>
+                        <span class="tech-tag">MT5</span>
+                        <span class="tech-tag">Redis</span>
+                    </div>
+                </div>
+            </div>
+            <div class="mission-card">
+                <div class="mission-image">
+                    <div class="mission-badge">Mission Complete</div>
+                </div>
+                <div class="mission-content">
+                    <h3>Reactlyve</h3>
+                    <p>Record reactions to messages in real-time. Because sometimes a thumbs up isn't enough. Video responses that actually capture emotion.</p>
+                    <div class="tech-tags">
+                        <span class="tech-tag">WebRTC</span>
+                        <span class="tech-tag">React</span>
+                        <span class="tech-tag">Node.js</span>
+                        <span class="tech-tag">AWS</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Launch Section -->
+    <section class="launch" id="launch">
+        <div class="launch-platform">
+            <h2>Your Project Could Be</h2>
+            <div class="mission-counter">#21</div>
+            <p>Ready to launch something that actually works?</p>
+            <a href="mailto:hello@fluxium.dev" class="launch-btn">
+                Launch Your Project 🚀
+            </a>
+        </div>
+    </section>
+
+    <script>
+        // Remove loader after page load
+        window.addEventListener('load', () => {
+            setTimeout(() => {
+                const loader = document.getElementById('loader');
+                loader.style.opacity = '0';
+                setTimeout(() => loader.style.display = 'none', 500);
+            }, 1500);
+        });
+
+        // Create starfield
+        const starfield = document.getElementById('starfield');
+        for (let i = 0; i < 200; i++) {
+            const star = document.createElement('div');
+            star.className = 'star';
+            star.style.left = Math.random() * 100 + '%';
+            star.style.top = Math.random() * 100 + '%';
+            star.style.animationDelay = Math.random() * 3 + 's';
+            star.style.animationDuration = (3 + Math.random() * 2) + 's';
+            starfield.appendChild(star);
+        }
+
+        // Custom cursor
+        const cursor = document.querySelector('.cursor');
+        document.addEventListener('mousemove', (e) => {
+            cursor.style.left = e.clientX - 10 + 'px';
+            cursor.style.top = e.clientY - 10 + 'px';
+        });
+
+        // Rocket tracker
+        const rocket = document.getElementById('rocketTracker');
+        const rocketTrail = document.getElementById('rocketTrail');
+        let lastScrollY = 0;
+        let scrollVelocity = 0;
+
+        window.addEventListener('scroll', () => {
+            const scrollY = window.scrollY;
+            const maxScroll = document.documentElement.scrollHeight - window.innerHeight;
+            const scrollProgress = scrollY / maxScroll;
+            
+            // Update rocket position
+            const rocketTop = 20 + (scrollProgress * 60);
+            rocket.style.top = rocketTop + '%';
+            
+            // Calculate scroll velocity
+            scrollVelocity = Math.abs(scrollY - lastScrollY);
+            lastScrollY = scrollY;
+            
+            // Update fire intensity based on velocity
+            const fire = rocket.querySelector('.rocket-fire');
+            const fireScale = 1 + Math.min(scrollVelocity / 100, 0.5);
+            fire.style.transform = `translateX(-50%) scaleY(${fireScale})`;
+            
+            // Update trail
+            rocketTrail.style.height = Math.min(scrollVelocity * 5, 200) + 'px';
+            
+            // Hide rocket at the end
+            if (scrollProgress > 0.95) {
+                rocket.style.opacity = '0';
+            } else {
+                rocket.style.opacity = '1';
+            }
+        });
+
+        // Animate stats on scroll
+        const observerOptions = {
+            threshold: 0.5,
+            rootMargin: '0px 0px -100px 0px'
+        };
+
+        const observer = new IntersectionObserver((entries) => {
+            entries.forEach(entry => {
+                if (entry.isIntersecting) {
+                    const statNumbers = entry.target.querySelectorAll('.stat-number');
+                    statNumbers.forEach(stat => {
+                        const target = parseInt(stat.getAttribute('data-count'));
+                        const duration = 2000;
+                        const increment = target / (duration / 16);
+                        let current = 0;
+                        
+                        const updateCount = () => {
+                            current += increment;
+                            if (current < target) {
+                                stat.textContent = Math.floor(current) + (stat.getAttribute('data-count') === '100' ? '%' : '+');
+                                requestAnimationFrame(updateCount);
+                            } else {
+                                stat.textContent = target + (stat.getAttribute('data-count') === '100' ? '%' : '+');
+                            }
+                        };
+                        
+                        updateCount();
+                    });
+                    observer.unobserve(entry.target);
+                }
+            });
+        }, observerOptions);
+
+        // Observe stats section
+        const statsSection = document.querySelector('.stats-container');
+        if (statsSection) observer.observe(statsSection);
+
+        // Parallax effect on mouse move
+        document.addEventListener('mousemove', (e) => {
+            const x = (e.clientX / window.innerWidth - 0.5) * 2;
+            const y = (e.clientY / window.innerHeight - 0.5) * 2;
+            
+            // Move stars slightly
+            starfield.style.transform = `translate(${x * 10}px, ${y * 10}px)`;
+        });
+
+        // Smooth scroll for navigation links
+        document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+            anchor.addEventListener('click', function (e) {
+                e.preventDefault();
+                const target = document.querySelector(this.getAttribute('href'));
+                if (target) {
+                    target.scrollIntoView({
+                        behavior: 'smooth',
+                        block: 'start'
+                    });
+                }
+            });
+        });
+
+        // Add hover effects to cards
+        document.querySelectorAll('.capability-card, .mission-card').forEach(card => {
+            card.addEventListener('mouseenter', function() {
+                this.style.transform = 'translateY(-10px) scale(1.02)';
+            });
+            
+            card.addEventListener('mouseleave', function() {
+                this.style.transform = 'translateY(0) scale(1)';
+            });
+        });
+    </script>
+</body>
+</html>
