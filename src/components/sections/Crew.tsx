@@ -102,7 +102,7 @@ export default function Crew() {
 
             {/* Founders Grid */}
             <div className="grid sm:grid-cols-2 gap-6">
-              {crewMembers.map((member, index) => (
+              {crewMembers.map((member) => (
                 <motion.div
                   key={member.name}
                   variants={itemVariants}

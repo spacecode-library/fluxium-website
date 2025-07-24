@@ -256,7 +256,7 @@ export default function MissionLogModal({ project, isOpen, onClose }: MissionLog
                   {tabs.map((tab) => (
                     <button
                       key={tab.id}
-                      onClick={() => setActiveTab(tab.id as any)}
+                      onClick={() => setActiveTab(tab.id as 'overview' | 'technical' | 'metrics')}
                       className={`flex items-center gap-2 px-3 py-2 rounded-md text-sm font-medium transition-all duration-200 ${
                         activeTab === tab.id
                           ? 'bg-cosmic-cyan/20 text-cosmic-cyan border border-cosmic-cyan/30'
